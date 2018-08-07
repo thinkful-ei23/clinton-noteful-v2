@@ -17,14 +17,14 @@ router.get('/', (req, res, next) => {
   const { searchTerm } = req.query;
 
   knex
-    .select('id', 'title', 'content')
+    .select('notes.id', 'title', 'content')
     .from('notes')
     .modify(queryBuilder => {
       if (searchTerm) {
         queryBuilder.where('title', 'like', `%${searchTerm}%`);
       }
     })
-    .orderBy('id')
+    .orderBy('notes.id')
     .then(results => res.json(results))
     .catch(err => next(err)); // => Error handler
 });
@@ -35,7 +35,7 @@ router.get('/:id', (req, res, next) => {
 
   knex
     // returns only the first object (not an array)
-    .first('id', 'title', 'content')
+    .first('notes.id', 'title', 'content')
     .from('notes')
     .where( { id: id } )
     .then( results => {
@@ -72,7 +72,7 @@ router.put('/:id', (req, res, next) => {
   knex('notes')
     .update( updateObj )
     .where( { id: id } )
-    .returning( [ 'id', 'title', 'content' ] )
+    .returning( [ 'notes.id', 'title', 'content' ] )
     .then( ([results]) => {
       if (results) {
         res.json(results);
@@ -98,7 +98,7 @@ router.post('/', (req, res, next) => {
   knex
     .insert(newItem)
     .into('notes')
-    .returning( [ 'id', 'title', 'content' ] )
+    .returning( [ 'notes.id', 'title', 'content' ] )
     .then( ([results]) => {
       if (results) {
         res.location(`http://${req.headers.host}/notes/${results.id}`).status(201).json(results);
