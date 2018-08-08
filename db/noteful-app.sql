@@ -30,12 +30,12 @@ INSERT INTO notes (title, content, folder_id) VALUES
   (
     '5 life lessons learned from cats',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    100
+    103
   ),
   (
     'What the government doesn''t want you to know about cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    100
+    102
   ),
   (
     'The most boring article about cats you''ll ever read',
@@ -45,22 +45,22 @@ INSERT INTO notes (title, content, folder_id) VALUES
   (
     '7 things lady gaga has in common with cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    103
+    100
   ),
   (
     'The most incredible article about cats you''ll ever read',
     'Lorem ipsum dolor sit amet, boring consectetur adipiscing elit,',
-    102
+    103
   ),
   (
     '10 ways cats can help you live to 100',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    103
+    102
   ),
   (
     '9 reasons you can blame the recession on cats',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    102
+    101
   ),
   (
     '10 ways marketers are making you addicted to cats',
@@ -70,7 +70,7 @@ INSERT INTO notes (title, content, folder_id) VALUES
   (
     '11 ways investing in cats can make you a millionaire',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    102
+    103
   ),
   (
     'Why you should forget everything you learned about cats',
