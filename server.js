@@ -1,5 +1,6 @@
 'use strict';
 
+// Load Express, Morgan, CORS, Config, and Routers into the file
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -12,7 +13,7 @@ const foldersRouter = require('./routes/folders');
 // Create an Express application
 const app = express();
 
-// Log all requests
+// Log all requests with Morgan
 app.use(morgan('dev'));
 
 // Create a static webserver
@@ -21,10 +22,12 @@ app.use(express.static('public'));
 // Enable CORS support
 app.use(cors());
 
-// Parse request body
+// Parse incoming requests that contain JSON and
+// make them available on `req.body`
 app.use(express.json());
 
-// Mount router on "/api"
+// Route all requests to `/api/notes` and `/api/folders`
+// through the proper router
 app.use('/api/notes', notesRouter);
 app.use('/api/folders', foldersRouter);
 
@@ -35,7 +38,7 @@ app.use((req, res, next) => {
   next(err);
 });
 
-// Custom Error Handler
+// Custom 'Catch-All' Error Handler
 app.use((err, req, res, next) => {
   if (err.status) {
     const errBody = Object.assign({}, err, { message: err.message });

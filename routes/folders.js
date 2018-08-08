@@ -3,20 +3,24 @@
 const express = require('express');
 const knex = require('../knex');
 
+// Create an router instance (aka "mini-app")
 const router = express.Router();
 
+// Get all folders
 router.get('/', (req, res, next) => {
   knex.select('folders.id', 'name')
     .from('folders')
     .then(results => {
       res.json(results);
     })
-    .catch(err => next(err));
+    .catch(err => next(err)); // => Error handler
 });
 
+// Get a single folder (by id)
 router.get('/:id', (req, res, next) => {
   const id = req.params.id;
 
+  // `.first()` returns only the first object (not an array)
   knex.first('folders.id', 'name')
     .from('folders')
     .where( { id: id } )
@@ -24,23 +28,25 @@ router.get('/:id', (req, res, next) => {
       if (results) {
         res.json(results);
       } else {
-        next();
+        next(); // => 404 handler
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(err)); // => Error handler
 });
 
+// Update a folder (unused in app, but rounds out API)
 router.put('/:id', (req, res, next) => {
   const id = req.params.id;
 
   const updateObj = {};
 
+  /***** Never trust users - validate input *****/
   if ('name' in req.body) {
     updateObj.name = req.body.name;
   } else {
     const err = new Error('Missing `name` in request body');
     err.status = 400;
-    return next(err);
+    return next(err); // => Error handler
   }
 
   knex('folders')
@@ -51,12 +57,13 @@ router.put('/:id', (req, res, next) => {
       if (results) {
         res.json(results);
       } else {
-        next();
+        next(); // => 404 handler
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(err)); // => Error handler
 });
 
+// Create a folder
 router.post('/', (req, res, next) => {
   const newFolder = {};
 
@@ -66,7 +73,7 @@ router.post('/', (req, res, next) => {
   } else {
     const err = new Error('Missing `name` in request body');
     err.status = 400;
-    return next(err);
+    return next(err); // => Error handler
   }
   
   knex
@@ -78,9 +85,10 @@ router.post('/', (req, res, next) => {
         res.location(`http://${req.headers.host}/folders/${results.id}`).status(201).json(results);
       }
     })
-    .catch(err => next(err));
+    .catch(err => next(err)); // => Error handler
 });
 
+// Delete a folder
 router.delete('/:id', (req, res, next) => {
   const id = req.params.id;
 
@@ -90,7 +98,7 @@ router.delete('/:id', (req, res, next) => {
     .then(() => {
       res.sendStatus(204);
     })
-    .catch(err => next(err));
+    .catch(err => next(err)); // => Error handler
 });
 
 module.exports = router;
