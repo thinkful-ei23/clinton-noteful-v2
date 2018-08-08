@@ -30,4 +30,31 @@ router.get('/:id', (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.put('/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  const updateObj = {};
+
+  if ('name' in req.body) {
+    updateObj.name = req.body.name;
+  } else {
+    const err = new Error('Missing `name` in request body');
+    err.status = 400;
+    return next(err);
+  }
+
+  knex('folders')
+    .update( updateObj )
+    .where( { id: id } )
+    .returning( [ 'folders.id', 'name' ] )
+    .then( ([results]) => {
+      if (results) {
+        res.json(results);
+      } else {
+        next();
+      }
+    })
+    .catch(err => next(err));
+});
+
 module.exports = router;
