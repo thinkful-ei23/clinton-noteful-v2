@@ -40,27 +40,27 @@ INSERT INTO notes (title, content, folder_id) VALUES
   (
     'The most boring article about cats you''ll ever read',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    100
+    101
   ),
   (
     '7 things lady gaga has in common with cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    100
+    103
   ),
   (
     'The most incredible article about cats you''ll ever read',
     'Lorem ipsum dolor sit amet, boring consectetur adipiscing elit,',
-    100
+    102
   ),
   (
     '10 ways cats can help you live to 100',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    100
+    103
   ),
   (
     '9 reasons you can blame the recession on cats',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    100
+    102
   ),
   (
     '10 ways marketers are making you addicted to cats',
