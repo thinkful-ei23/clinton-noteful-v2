@@ -16,21 +16,25 @@ const router = express.Router();
 router.get('/', (req, res, next) => {
   const { searchTerm, folderId, tagId } = req.query;
 
+  // Select all notes and leftJoin on folders and tags
   knex.select('notes.id', 'title', 'content', 'folder_id', 'folders.name as folderName', 'tags.name as tagName', 'tags.id as tagId')
     .from('notes')
     .leftJoin('folders', 'notes.folder_id', 'folders.id')
     .leftJoin('notes_tags', 'notes.id', 'notes_tags.note_id')
     .leftJoin('tags', 'notes_tags.tag_id', 'tags.id')
+    // Filter by search term, if present
     .modify(queryBuilder => {
       if (searchTerm) {
         queryBuilder.where('title', 'like', `%${searchTerm}%`);
       }
     })
+    // Filter by folder, if specified
     .modify(queryBuilder => {
       if (folderId) {
         queryBuilder.where('folder_id', folderId);
       }
     })
+    // Filter by tag, if specified
     .modify(queryBuilder => {
       if (tagId) {
         queryBuilder.where('tag_id', tagId);
@@ -39,7 +43,9 @@ router.get('/', (req, res, next) => {
     .orderBy('notes.id')
     .then(result => {
       if (result) {
+        // Hydrate the results
         const hydrated = hydrateNotes(result);
+        // Respond with a 200 status and an array of note objects
         res.json(hydrated); // => Client
       } else {
         next(); // => 404 handler
@@ -50,6 +56,7 @@ router.get('/', (req, res, next) => {
 
 /* ========== GET/READ SINGLE NOTE ========== */
 router.get('/:id', (req, res, next) => {
+  // Select single note and leftJoin on folders and tags
   knex.select('notes.id', 'title', 'content', 'folder_id', 'folders.name as folderName', 'tags.name as tagName', 'tags.id as tagId')
     .from('notes')
     .leftJoin('folders', 'notes.folder_id', 'folders.id')
@@ -58,7 +65,9 @@ router.get('/:id', (req, res, next) => {
     .where( { 'notes.id': req.params.id } )
     .then( result => {
       if (result) {
+        // Hydrate the results
         const [hydrated] = hydrateNotes(result);
+        // Respond with a 200 status and the note object
         res.json(hydrated); // => Client
       } else {
         next(); // => 404 handler
@@ -137,20 +146,23 @@ router.put('/:id', (req, res, next) => {
     folder_id: (folderId) ? folderId : null
   };
 
+  // Update note in notes table
   knex.update(updateObj)
     .from('notes')
-    .where( { 'notes.id': req.params.id } )
+    .where( { 'notes.id': noteId } )
     .then( () => {
+      // Delete current related tags from notes_tags table
       return knex.del()
         .from('notes_tags')
         .where('note_id', noteId);
     })
     .then(() => {
+      // Insert related tags into notes_tags table
       const tagsInsert = tags.map(tagId => ({ note_id: noteId, tag_id: tagId }));
       return knex.insert(tagsInsert).into('notes_tags');
     })
     .then(() => {
-      // Select the new note and leftJoin on folders and tags
+      // Select the updated note and leftJoin on folders and tags
       return knex.select('notes.id', 'title', 'content', 'folders.id as folder_id', 'folders.name as folderName', 'tags.id as tagId', 'tags.name as tagName')
         .from('notes')
         .leftJoin('folders', 'notes.folder_id', 'folders.id')
@@ -160,7 +172,9 @@ router.put('/:id', (req, res, next) => {
     })
     .then(result => {
       if (result) {
+        // Hydrate the results
         const hydrated = hydrateNotes(result);
+        // Respond with a 200 status and a note object
         res.json(hydrated); // => Client
       } else {
         next(); // => 404 handler
@@ -175,6 +189,7 @@ router.delete('/:id', (req, res, next) => {
     .from('notes')
     .where( { id: req.params.id } )
     .then(() => {
+      // Respond with a 204 status
       res.sendStatus(204); // => Client
     })
     .catch(err => next(err)); // => Error handler

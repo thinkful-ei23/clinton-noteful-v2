@@ -54,27 +54,27 @@ INSERT INTO notes (title, content, folder_id) VALUES
   (
     '5 life lessons learned from cats',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    103
+    101
   ),
   (
     'What the government doesn''t want you to know about cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    102
+    100
   ),
   (
     'The most boring article about cats you''ll ever read',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    101
+    103
   ),
   (
     '7 things lady gaga has in common with cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    100
+    102
   ),
   (
     'The most incredible article about cats you''ll ever read',
     'Lorem ipsum dolor sit amet, boring consectetur adipiscing elit,',
-    103
+    100
   ),
   (
     '10 ways cats can help you live to 100',
@@ -84,22 +84,22 @@ INSERT INTO notes (title, content, folder_id) VALUES
   (
     '9 reasons you can blame the recession on cats',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    101
+    103
   ),
   (
     '10 ways marketers are making you addicted to cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    100
+    103
   ),
   (
     '11 ways investing in cats can make you a millionaire',
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
-    103
+    101
   ),
   (
     'Why you should forget everything you learned about cats',
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
-    102
+    100
   );
 
 INSERT INTO tags (name) VALUES
@@ -109,9 +109,16 @@ INSERT INTO tags (name) VALUES
   ('good');
 
 INSERT INTO notes_tags (note_id, tag_id) VALUES
-  (1000, 1), (1000, 2),
+  (1000, 1), (1000, 4),
+  (1001, 1), (1001, 3),
+  (1002, 1),
+  (1003, 1), (1003, 2), (1003, 4),
   (1004, 1),
-  (1006, 4), (1006, 1);
+  (1005, 1),
+  (1006, 1), (1006, 4),
+  (1007, 1),
+  (1008, 1),
+  (1009, 1);
 
 -- -- get all notes
 -- SELECT * FROM notes;
