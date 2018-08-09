@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', (req, res, next) => {
   knex.select('tags.id', 'name')
     .from('tags')
-    .then(results => res.json(results)) // => Client
+    .then(result => res.json(result)) // => Client
     .catch(err => next(err)); // => Error handler
 });
 
