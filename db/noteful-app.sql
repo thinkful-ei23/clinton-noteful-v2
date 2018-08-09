@@ -1,5 +1,7 @@
 -- psql -U dev -d noteful-app -f ./db/noteful-app.sql
 
+DROP TABLE IF EXISTS notes_tags;
+DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS notes;
 DROP TABLE IF EXISTS folders;
 
@@ -31,6 +33,16 @@ ALTER TABLE notes ADD COLUMN folder_id int REFERENCES folders(id) ON DELETE SET 
 -- If you delete a folder then delete all notes that reference the folder
 -- IOW, delete a folder and all the notes in it
 -- ALTER TABLE notes ADD COLUMN folder_id int REFERENCES folders(id) ON DELETE CASCADE;
+
+CREATE TABLE tags (
+  id serial PRIMARY KEY,
+  name text NOT NULL UNIQUE
+);
+
+CREATE TABLE notes_tags (
+  note_id INTEGER NOT NULL REFERENCES notes ON DELETE CASCADE,
+  tag_id INTEGER NOT NULL REFERENCES tags ON DELETE CASCADE
+);
 
 INSERT INTO folders (name) VALUES
   ('Archive'),
@@ -89,6 +101,17 @@ INSERT INTO notes (title, content, folder_id) VALUES
     'Posuere sollicitudin aliquam ultrices sagittis orci a.',
     102
   );
+
+INSERT INTO tags (name) VALUES
+  ('cats'),
+  ('gaga'),
+  ('government'),
+  ('good');
+
+INSERT INTO notes_tags (note_id, tag_id) VALUES
+  (1000, 1), (1000, 2),
+  (1004, 1),
+  (1006, 4), (1006, 1);
 
 -- -- get all notes
 -- SELECT * FROM notes;
