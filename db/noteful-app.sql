@@ -36,7 +36,7 @@ ALTER TABLE notes ADD COLUMN folder_id int REFERENCES folders(id) ON DELETE SET 
 
 CREATE TABLE tags (
   id serial PRIMARY KEY,
-  name text NOT NULL UNIQUE
+  name text UNIQUE NOT NULL
 );
 
 CREATE TABLE notes_tags (
