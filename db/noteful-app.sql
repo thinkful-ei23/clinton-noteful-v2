@@ -10,21 +10,33 @@ CREATE TABLE folders (
 
 ALTER SEQUENCE folders_id_seq RESTART WITH 100;
 
+CREATE TABLE notes (
+  id serial PRIMARY KEY,
+  title text NOT NULL,
+  content text,
+  created timestamp DEFAULT now()
+  -- folder_id int REFERENCES folders(id) ON DELETE SET NULL
+);
+
+ALTER SEQUENCE notes_id_seq RESTART WITH 1000;
+
+-- If you delete a folder then set folder_id to null on related notes
+-- IOW, delete a folder and move the notes to "uncategorized"
+ALTER TABLE notes ADD COLUMN folder_id int REFERENCES folders(id) ON DELETE SET NULL;
+
+-- Prevent folders from being deleted if referenced by any note
+-- IOW, only empty folder can be deleted
+-- ALTER TABLE notes ADD COLUMN folder_id int REFERENCES folders(id) ON DELETE RESTRICT;
+
+-- If you delete a folder then delete all notes that reference the folder
+-- IOW, delete a folder and all the notes in it
+-- ALTER TABLE notes ADD COLUMN folder_id int REFERENCES folders(id) ON DELETE CASCADE;
+
 INSERT INTO folders (name) VALUES
   ('Archive'),
   ('Drafts'),
   ('Personal'),
   ('Work');
-
-CREATE TABLE notes (
-  id serial PRIMARY KEY,
-  title text NOT NULL,
-  content text,
-  created timestamp DEFAULT now(),
-  folder_id int REFERENCES folders(id) ON DELETE SET NULL
-);
-
-ALTER SEQUENCE notes_id_seq RESTART WITH 1000;
 
 INSERT INTO notes (title, content, folder_id) VALUES
   (
@@ -80,3 +92,14 @@ INSERT INTO notes (title, content, folder_id) VALUES
 
 -- -- get all notes
 -- SELECT * FROM notes;
+
+-- -- get all folders
+-- SELECT * FROM folders;
+
+-- -- get all notes with folders
+-- SELECT * FROM notes
+-- INNER JOIN folders ON notes.folder_id = folders.id;
+
+-- -- get all notes, show folders if they exists otherwise null
+-- SELECT folder_id as folderId FROM notes
+-- LEFT JOIN folders ON notes.folder_id = folders.id;
