@@ -37,20 +37,20 @@ router.post('/', (req, res, next) => {
   if (!name) {
     const err = new Error('Missing `name` in request body');
     err.status = 400;
-    return next(err);
+    return next(err); // => Error handler
   }
 
   const newItem = { name };
 
   knex.insert(newItem)
     .into('tags')
-    .returning(['id', 'name'])
-    .then((results) => {
-      // Uses Array index solution to get first item in results array
-      const result = results[0];
-      res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
+    .returning(['tags.id', 'name'])
+    .then( ([result]) => {
+      res.location(`${req.originalUrl}/${result.id}`)
+        .status(201)
+        .json(result); // => Client
     })
-    .catch(err => next(err));
+    .catch(err => next(err)); // => Error handler
 });
 
 /* ========== PUT/UPDATE A SINGLE TAG ========== */
@@ -80,7 +80,7 @@ router.put('/:id', (req, res, next) => {
     .catch(err => next(err)); // => Error handler
 });
 
-/* ========== DELETE/REMOVE A SINGLE FOLDER ========== */
+/* ========== DELETE/REMOVE A SINGLE TAG ========== */
 router.delete('/:id', (req, res, next) => {
   knex.del()
     .from('tags')
