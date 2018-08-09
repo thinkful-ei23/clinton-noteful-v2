@@ -9,6 +9,7 @@ const { PORT } = require('./config');
 
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
+const tagsRouter = require('./routes/tags');
 
 // Create an Express application
 const app = express();
@@ -26,10 +27,11 @@ app.use(cors());
 // make them available on `req.body`
 app.use(express.json());
 
-// Route all requests to `/api/notes` and `/api/folders`
-// through the proper router
+// Route all requests to `/api/notes`, `/api/folders`,
+// and `/api/tags` through the proper Router
 app.use('/api/notes', notesRouter);
 app.use('/api/folders', foldersRouter);
+app.use('/api/tags', tagsRouter);
 
 // Custom 404 Not Found route handler
 app.use((req, res, next) => {
