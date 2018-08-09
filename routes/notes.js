@@ -62,7 +62,7 @@ router.get('/:id', (req, res, next) => {
     .leftJoin('folders', 'notes.folder_id', 'folders.id')
     .leftJoin('notes_tags', 'notes.id', 'notes_tags.note_id')
     .leftJoin('tags', 'notes_tags.tag_id', 'tags.id')
-    .where( { 'notes.id': req.params.id } )
+    .where('notes.id', req.params.id)
     .then( result => {
       if (result) {
         // Hydrate the results
@@ -149,7 +149,7 @@ router.put('/:id', (req, res, next) => {
   // Update note in notes table
   knex.update(updateObj)
     .from('notes')
-    .where( { 'notes.id': noteId } )
+    .where('notes.id', noteId)
     .then( () => {
       // Delete current related tags from notes_tags table
       return knex.del()
